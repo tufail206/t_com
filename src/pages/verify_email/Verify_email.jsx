@@ -8,7 +8,7 @@ const Verify_email = () => {
     const verifyEmail = async () => {
       const params = new URLSearchParams(window.location.search);
       const token = params.get("token");
-
+    console.log("token",token);
       if (!token) {
         alert("Invalid verification link");
         return;
