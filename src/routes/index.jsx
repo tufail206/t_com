@@ -40,6 +40,10 @@ export const AppRoute = (
         lazy={() => import("../pages/order_success")}
       />
       <Route path={appPath.FAVORITE} lazy={() => import("../pages/favorite")} />
+          <Route
+          path={appPath.PROFILE_VERIFY}
+          lazy={() => import("../pages/verify_email")}
+        />
     </Route>
 
     {/* User Dashboard (Protected) */}
@@ -53,14 +57,15 @@ export const AppRoute = (
           path={appPath.PROFILE_MANAGE}
           lazy={() => import("../layout/UserLayout/manage")}
         />
+        {/* <Route
+          path={appPath.PROFILE_VERIFY}
+          lazy={() => import("../pages/verify_email")}
+        /> */}
         <Route
           path={appPath.USER_ORDERS}
           lazy={() => import("../layout/UserLayout/Myorders")}
         />
-        <Route
-          path={"/payment"}
-          lazy={() => import("../pages/payment")}
-        />
+        <Route path={"/payment"} lazy={() => import("../pages/payment")} />
         <Route
           path={appPath.USER_ORDERS_CANCELLATIONS}
           lazy={() => import("../layout/UserLayout/MyCancellations")}

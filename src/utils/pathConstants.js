@@ -16,6 +16,7 @@ export const appPath = {
   CHECKOUT: "/checkout",
   ORDER_SUCCESS: "order-success",
   PROFILE_MANAGE: "profile/manage",
+  PROFILE_VERIFY: "verify-email",
   USER_ORDERS: "profile/orders",
   USER_ORDERS_CANCELLATIONS: "profile/orders-cancellations",
   USER_REVIEWS: "profile/reviews",
