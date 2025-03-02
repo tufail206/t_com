@@ -1,28 +1,49 @@
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-
+import React, { useEffect, useState } from "react";
+import { Controller, useForm  } from "react-hook-form";
+import { Link ,useNavigate,useActionData,useSubmit  } from "react-router-dom";
+import {toast} from 'react-toastify'
 const Signup = () => {
+  const submit=useSubmit()
+  const navigate=useNavigate()
   const {
     control,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      fullName: "",
+      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
-    },
+          },
   });
-
+  const  actionData=useActionData()
+  const [isSubmitting,setIsSubmitting]=useState(false)
   const onSubmit = (data) => {
-    console.log("Signup Data:", data);
-    reset(); // Reset form after submission
+    const submitOptions={
+      method:"POST",
+    encType: 'application/json',
+      action:"/Signup"
+    }
+     setIsSubmitting(true);
+    submit(data, submitOptions);
+   
   };
+   useEffect(() => {
+     if (actionData) {
+       if (actionData.success) {
+         setIsSubmitting(false);
+         toast.success(actionData.message);
+         reset();
+          navigate("/login")
 
+       } else {
+         setIsSubmitting(false);
+         toast.error(actionData.message);
+        
+       }
+     }
+   }, [reset, actionData]);
   return (
     <div className="flex items-center justify-center h-max  bg-gray-100">
       <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
@@ -37,7 +58,7 @@ const Signup = () => {
           {/* Full Name Field */}
           <div>
             <Controller
-              name="fullName"
+              name="name"
               control={control}
               rules={{ required: "Full Name is required" }}
               render={({ field }) => (
@@ -49,8 +70,8 @@ const Signup = () => {
                 />
               )}
             />
-            {errors.fullName && (
-              <p className="text-red-500 text-sm">{errors.fullName.message}</p>
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
             )}
           </div>
 
@@ -94,38 +115,17 @@ const Signup = () => {
             )}
           </div>
 
-          {/* Confirm Password Field */}
-          <div>
-            <Controller
-              name="confirmPassword"
-              control={control}
-              rules={{
-                required: "Confirm Password is required",
-                validate: (value) =>
-                  value === watch("password") || "Passwords do not match",
-              }}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="password"
-                  placeholder="Confirm Password"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              )}
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
-
           {/* Sign Up Button */}
           <button
+         
+            disabled={isSubmitting}
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
           >
-            Sign Up
+           {
+            isSubmitting? "Signing Up..." : "Sign Up"
+ 
+           }
           </button>
         </form>
 

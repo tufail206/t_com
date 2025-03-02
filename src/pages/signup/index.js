@@ -1,2 +1,3 @@
 import Component  from "./Register";
-export {Component}
+import action from "./action";
+export {Component , action}

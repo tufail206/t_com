@@ -1,6 +1,7 @@
+import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 const Verify_email = () => {
   const navigate = useNavigate();
 
@@ -8,18 +9,21 @@ const Verify_email = () => {
     const verifyEmail = async () => {
       const params = new URLSearchParams(window.location.search);
       const token = params.get("token");
-    console.log("token",token);
       if (!token) {
         alert("Invalid verification link");
         return;
       }
 
       try {
-        const res = await fetch(
+        const res = await axios.get(
           `http://localhost:5000/api/v1/verify-email?token=${token}`
-        );
-        const data = await res.json();
-        alert(data.message);
+        ).then((response) => response.data);
+    
+        if (!res.success) {
+          toast.error(data.message);
+          return;
+        }
+        toast.success(res.message);
         navigate("/login");
       } catch (error) {
         console.error("Verification error", error);
@@ -29,7 +33,7 @@ const Verify_email = () => {
     verifyEmail();
   }, [navigate]);
 
-  return <h2>Verifying Email...</h2>;
+  return <h2 className="text-2xl w-full h-[30vh] flex justify-center items-center ">Verifying Your Email...</h2>;
 };
 
 

@@ -10,7 +10,7 @@ import { AppRoute } from "./routes";
 import Loading from "./components/Loading"; // Fallback loading component
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-
+import {ToastContainer} from 'react-toastify'
 const router = createBrowserRouter(createRoutesFromElements(AppRoute), {
   future: {
       v7_relativeSplatPath: true, // ✅ Opts into new relative route resolution for splat routes
@@ -20,6 +20,7 @@ const router = createBrowserRouter(createRoutesFromElements(AppRoute), {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
+      <ToastContainer /> 
       <Suspense fallback={<Loading />}>
         <RouterProvider
           router={router}

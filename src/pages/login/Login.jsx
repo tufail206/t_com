@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useActionData, useNavigate, useSubmit } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const submit=useSubmit()
+  const navigate=useNavigate()
   const {
     control,
     handleSubmit,
@@ -12,13 +15,35 @@ const Login = () => {
     defaultValues: {
       email: "",
       password: "",
-    },
+          },
   });
-
+  const  actionData=useActionData()
+  const [isSubmitting,setIsSubmitting]=useState(false)
   const onSubmit = (data) => {
-    console.log("Login Data:", data);
-    reset(); // Reset form after submission
+    const submitOptions={
+      method:"POST",
+    encType: 'application/json',
+    action:"/login"
+    }
+     setIsSubmitting(true);
+    submit(data, submitOptions);
+   
   };
+   useEffect(() => {
+     if (actionData) {
+       if (actionData.success) {
+         setIsSubmitting(false);
+         toast.success(actionData.message);
+         reset();
+         console.log("login success", actionData);
+         navigate('/')
+       } else {
+         setIsSubmitting(false);
+         toast.error(actionData.message);
+        
+       }
+     }
+   }, [reset, actionData]);
 
   return (
     <div className="flex items-center justify-center h-max bg-gray-100">
@@ -83,10 +108,11 @@ const Login = () => {
 
           {/* Login Button */}
           <button
+          disabled={isSubmitting}
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
           >
-            Login
+           { isSubmitting ? "Logging ": "Login"}
           </button>
         </form>
 
